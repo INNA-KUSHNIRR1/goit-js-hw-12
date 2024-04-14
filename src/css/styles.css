@@ -68,7 +68,7 @@ body {
   flex-wrap: wrap;
   gap: 24px;
   justify-content: center;
-  height: auto;
+  /* height: auto; */
 }
 .card {
   width: 360px;
@@ -141,7 +141,11 @@ body {
   }
 }
 
-button[type='button'] {
+.loader.is-active {
+  display: none;
+}
+
+.btn-load-more {
   border: none;
   border-radius: 8px;
   padding: 8px 16px;
@@ -156,9 +160,13 @@ button[type='button'] {
   margin: 24px auto;
 }
 
-button[type='button']:hover {
+.btn-load-more:hover {
   background-color: #ee5f33;
 }
-button[type='button'].is-active {
+.btn-load-more.is-active {
   display: none;
+}
+
+.box-load-more {
+  text-align: center;
 }
