@@ -28,6 +28,7 @@ body {
   padding-top: 100px;
   padding-bottom: 32px;
   justify-content: center;
+  align-items: center;
 }
 .form input {
   outline: none;
@@ -68,10 +69,10 @@ body {
   flex-wrap: wrap;
   gap: 24px;
   justify-content: center;
-  /* height: auto; */
 }
 .card {
   width: 360px;
+  height: 200px;
   display: flex;
   flex-direction: column;
   border: 1px solid #808080;
@@ -81,6 +82,7 @@ body {
 .card:hover {
   transform: scale(1.04);
 }
+
 .list-stat {
   border-bottom: 1px solid #808080;
   border-left: 1px solid #808080;
@@ -119,6 +121,7 @@ body {
   background: linear-gradient(0deg, rgba(255, 61, 0, 0.2) 33%, #ff3d00 100%);
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
+  margin-top: 24px;
 }
 .loader::after {
   content: '';

@@ -12,8 +12,8 @@ const ref = {
   gallery: document.querySelector('.js-gallery'),
   btnLoadMore: document.querySelector('.btn-load-more'),
   loader: document.querySelector('.loader'),
-  card: document.querySelector('.card'),
 };
+
 let textForm;
 let page = 1;
 let perPage = 15;
@@ -23,8 +23,11 @@ ref.btnLoadMore.addEventListener('click', onClickLoadMore);
 
 async function onSubmitForm(event) {
   event.preventDefault();
+  showLoader();
+  ref.gallery.innerHTML = '';
   const { text } = event.currentTarget.elements;
   textForm = text.value.trim();
+
   if (textForm === '') {
     return iziToast.warning({
       color: '#fc6e51',
@@ -32,9 +35,9 @@ async function onSubmitForm(event) {
       position: 'topCenter',
     });
   }
-  ref.gallery.innerHTML = '';
   try {
-    const { hits } = await getImagesFromApi(textForm, (page = 29), perPage);
+    const { hits } = await getImagesFromApi(textForm, (page = 1), perPage);
+
     if (hits.length === 0) {
       iziToast.warning({
         color: '#fc6e51',
@@ -45,10 +48,9 @@ async function onSubmitForm(event) {
       hideBtnAndLoader();
       return;
     }
-    showLoader();
+
     ref.gallery.insertAdjacentHTML('beforeend', createMarkup(hits));
     hideLoader();
-
     lightbox.refresh();
   } catch (error) {
     iziToast.error({
@@ -79,10 +81,9 @@ async function onClickLoadMore(event) {
       return;
     }
     ref.gallery.insertAdjacentHTML('beforeend', createMarkup(hits));
-    hideLoader();
-    let rect = ref.card.getBoundingClientRect();
-
     lightbox.refresh();
+    hideLoader();
+    scroll();
   } catch (error) {
     iziToast.error({
       color: 'red',
@@ -93,18 +94,13 @@ async function onClickLoadMore(event) {
     ref.form.reset();
   }
 }
+
 const lightbox = new SimpleLightbox('.card a', {
   captionsData: 'alt',
   captionDelay: 250,
   captionPosition: 'outside',
 });
 
-// function showBtnLodeMore() {
-//   ref.btnLoadMore.classList.remove('is-active');
-// }
-// function hideBtnLoadMore() {
-//   ref.btnLoadMore.classList.add('is-active');
-// }
 function showLoader() {
   ref.loader.classList.remove('is-active');
   ref.btnLoadMore.classList.add('is-active');
@@ -117,4 +113,13 @@ function hideLoader() {
 function hideBtnAndLoader() {
   ref.btnLoadMore.classList.add('is-active');
   ref.loader.classList.add('is-active');
+}
+function scroll() {
+  const card = document.querySelector('.card');
+  const cardHeight = card.getBoundingClientRect().height;
+  window.scrollBy({
+    left: 0,
+    top: cardHeight * 3,
+    behavior: 'smooth',
+  });
 }
