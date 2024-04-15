@@ -64,21 +64,25 @@ async function onSubmitForm(event) {
 }
 
 async function onClickLoadMore(event) {
-  page += 1;
   showLoader();
+  page += 1;
 
   try {
     const { hits, totalHits } = await getImagesFromApi(textForm, page, perPage);
-    const endPage = Math.ceil(totalHits / perPage);
+    const limit = Math.ceil(totalHits / perPage);
 
-    if (endPage === page) {
-      iziToast.warning({
+    if (page === limit) {
+      const diff = totalHits - (limit - 1) * perPage;
+
+      const lastHits = hits.slice(0, diff);
+      ref.gallery.insertAdjacentHTML('beforeend', createMarkup(lastHits));
+      lightbox.refresh();
+      hideBtnAndLoader();
+      return iziToast.warning({
         color: '#fc6e51',
         message: "We're sorry, but you've reached the end of search results.",
-        position: 'topCenter',
+        position: 'bottomRight',
       });
-      hideBtnAndLoader();
-      return;
     }
     ref.gallery.insertAdjacentHTML('beforeend', createMarkup(hits));
     lightbox.refresh();
