@@ -50,8 +50,8 @@ async function onSubmitForm(event) {
     }
 
     ref.gallery.insertAdjacentHTML('beforeend', createMarkup(hits));
-    hideLoader();
     lightbox.refresh();
+    hideLoader();
   } catch (error) {
     iziToast.error({
       color: 'red',
