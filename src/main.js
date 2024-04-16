@@ -52,6 +52,7 @@ async function onSubmitForm(event) {
     }
     if (hits.length < perPage) {
       ref.gallery.insertAdjacentHTML('beforeend', createMarkup(hits));
+      lightbox.refresh();
       hideBtnAndLoader();
       iziToast.warning({
         color: '#fc6e51',
