@@ -29,14 +29,16 @@ async function onSubmitForm(event) {
   textForm = text.value.trim();
 
   if (textForm === '') {
-    return iziToast.warning({
+    hideBtnAndLoader();
+    iziToast.warning({
       color: '#fc6e51',
       message: 'Field is empty!',
       position: 'topCenter',
     });
+    return;
   }
   try {
-    const { hits } = await getImagesFromApi(textForm, (page = 1), perPage);
+    const { hits } = await getImagesFromApi(textForm, (page = 33), perPage);
 
     if (hits.length === 0) {
       iziToast.warning({
@@ -48,7 +50,17 @@ async function onSubmitForm(event) {
       hideBtnAndLoader();
       return;
     }
-
+    if (hits.length < perPage) {
+      showLoader();
+      ref.gallery.insertAdjacentHTML('beforeend', createMarkup(hits));
+      hideBtnAndLoader();
+      iziToast.warning({
+        color: '#fc6e51',
+        message: "We're sorry, but you've reached the end of search results.",
+        position: 'bottomRight',
+      });
+      return;
+    }
     ref.gallery.insertAdjacentHTML('beforeend', createMarkup(hits));
     lightbox.refresh();
     hideLoader();
@@ -73,16 +85,16 @@ async function onClickLoadMore(event) {
 
     if (page === limit) {
       const diff = totalHits - (limit - 1) * perPage;
-
       const lastHits = hits.slice(0, diff);
       ref.gallery.insertAdjacentHTML('beforeend', createMarkup(lastHits));
       lightbox.refresh();
       hideBtnAndLoader();
-      return iziToast.warning({
+      iziToast.warning({
         color: '#fc6e51',
         message: "We're sorry, but you've reached the end of search results.",
         position: 'bottomRight',
       });
+      return;
     }
     ref.gallery.insertAdjacentHTML('beforeend', createMarkup(hits));
     lightbox.refresh();
