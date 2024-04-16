@@ -38,7 +38,7 @@ async function onSubmitForm(event) {
     return;
   }
   try {
-    const { hits } = await getImagesFromApi(textForm, (page = 33), perPage);
+    const { hits } = await getImagesFromApi(textForm, (page = 1), perPage);
 
     if (hits.length === 0) {
       iziToast.warning({
@@ -51,7 +51,6 @@ async function onSubmitForm(event) {
       return;
     }
     if (hits.length < perPage) {
-      showLoader();
       ref.gallery.insertAdjacentHTML('beforeend', createMarkup(hits));
       hideBtnAndLoader();
       iziToast.warning({
